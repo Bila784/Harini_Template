@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Bon Appétit - Restaurant Gastronomique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .menu-item:hover .menu-details {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .menu-details {
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        .dish-category.active {
+            background-color: #b91c1c;
+            color: white;
+        }
+        
+        .slider {
+            scroll-snap-type: x mandatory;
+        }
+        
+        .slide {
+            scroll-snap-align: start;
+        }
+        
+        .reservation-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #b91c1c;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-utensils text-3xl text-red-700 mr-2"></i>
+                <h1 class="title-font text-2xl font-bold text-gray-800">GLOBE TASTY</h1>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#home" class="text-gray-800 hover:text-red-700 font-medium">Accueil</a>
+                <a href="#menu" class="text-gray-800 hover:text-red-700 font-medium">Menu</a>
+                <a href="#about" class="text-gray-800 hover:text-red-700 font-medium">À propos</a>
+                <a href="#reservation" class="text-gray-800 hover:text-red-700 font-medium">Réservation</a>
+            </nav>
+            <button class="md:hidden text-gray-800" id="mobile-menu-button">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-white shadow-lg" id="mobile-menu">
+            <div class="px-4 py-2 flex flex-col space-y-3">
+                <a href="#home" class="text-gray-800 hover:text-red-700 font-medium py-2">Accueil</a>
+                <a href="#menu" class="text-gray-800 hover:text-red-700 font-medium py-2">Menu</a>
+                <a href="#about" class="text-gray-800 hover:text-red-700 font-medium py-2">À propos</a>
+                <a href="#reservation" class="text-gray-800 hover:text-red-700 font-medium py-2">Réservation</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero min-h-screen flex items-center justify-center text-center text-white">
+        <div class="container mx-auto px-4">
+            <h1 class="title-font text-4xl md:text-6xl font-bold mb-6">Ato nareo mijery izay tianareo</h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">Afaka mahita an'i Mihasoa sy Adel</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#menu" class="bg-red-700 hover:bg-red-800 text-white px-8 py-3 rounded-lg font-medium transition duration-300">Voir le menu</a>
+                <a href="#reservation" class="bg-transparent hover:bg-white hover:text-gray-900 border-2 border-white text-white px-8 py-3 rounded-lg font-medium transition duration-300">Réserver une table</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offers Slider -->
+    <section class="bg-gray-100 py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="title-font text-3xl font-bold text-center mb-8">Nos Spécialités du Moment</h2>
+            
+            <div class="relative">
+                <div class="slider flex overflow-x-auto scroll-smooth snap-x snap-mandatory pb-8" id="special-offers">
+                    <div class="slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" alt="Boeuf Bourguignon" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="title-font text-xl font-bold">Boeuf Bourguignon</h3>
+                                    <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">Nouveau</span>
+                                </div>
+                                <p class="text-gray-600 mb-4">Bœuf mijoté dans un vin rouge de Bourgogne avec des champignons et des oignons grelots.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xl font-bold text-gray-900">€24.90</span>
+                                    <button class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-medium">Commander</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1604977047416-9b6b90a8a5af?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Ratatouille" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="title-font text-xl font-bold">Ratatouille Provençale</h3>
+                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Végétarien</span>
+                                </div>
+                                <p class="text-gray-600 mb-4">Un mélange savoureux d'aubergines, courgettes, poivrons et tomates, mijoté à la provençale.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xl font-bold text-gray-900">€18.50</span>
+                                    <button class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-medium">Commander</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                            <img src="https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Tarte Tatin" class="w-full h-64 object-cover">
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="title-font text-xl font-bold">Tarte Tatin</h3>
+                                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium">Dessert</span>
+                                </div>
+                                <p class="text-gray-600 mb-4">Tarte aux pommes caramélisée renversée, servie tiède avec une boule de glace vanille.</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xl font-bold text-gray-900">€9.90</span>
+                                    <button class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-medium">Commander</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md p-3 -ml-4 hidden md:block" id="prev-slide">
+                    <i class="fas fa-chevron-left text-gray-700"></i>
+                </button>
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md p-3 -mr-4 hidden md:block" id="next-slide">
+                    <i class="fas fa-chevron-right text-gray-700"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="title-font text-3xl font-bold text-center mb-4">Notre Menu</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Découvrez notre sélection de plats préparés avec des ingrédients frais et locaux.</p>
+            
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <button class="dish-category px-4 py-2 rounded-full border border-gray-300 hover:bg-red-700 hover:text-white transition" data-category="all">Tout voir</button>
+                <button class="dish-category px-4 py-2 rounded-full border border-gray-300 hover:bg-red-700 hover:text-white transition" data-category="starters">Entrées</button>
+                <button class="dish-category px-4 py-2 rounded-full border border-gray-300 hover:bg-red-700 hover:text-white transition" data-category="mains">Plats principaux</button>
+                <button class="dish-category px-4 py-2 rounded-full border border-gray-300 hover:bg-red-700 hover:text-white transition" data-category="desserts">Desserts</button>
+                <button class="dish-category px-4 py-2 rounded-full border border-gray-300 hover:bg-red-700 hover:text-white transition" data-category="drinks">Boissons</button>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu-items">
+                <!-- Menu items will be loaded here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Notre restaurant" class="rounded-lg shadow-xl w-full">
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="title-font text-3xl font-bold mb-6">Notre Histoire</h2>
+                    <p class="text-gray-600 mb-4">Fondé en 1985 par le chef étoilé Pierre Laurent, Le Bon Appétit est rapidement devenu une référence de la gastronomie française à Paris.</p>
+                    <p class="text-gray-600 mb-6">Notre philosophie est simple : utiliser les meilleurs ingrédients locaux pour créer des plats qui célèbrent les traditions culinaires françaises tout en incorporant des touches modernes.</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="flex items-center">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-utensils text-red-700 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Cuisine artisanale</h4>
+                                <p class="text-sm text-gray-600">Tout fait maison</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-leaf text-red-700 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Ingrédients frais</h4>
+                                <p class="text-sm text-gray-600">Approvisionnement local</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-award text-red-700 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Chef étoilé</h4>
+                                <p class="text-sm text-gray-600">15 ans d'expérience</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-wine-glass-alt text-red-700 text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Cave à vin</h4>
+                                <p class="text-sm text-gray-600">300+ références</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#reservation" class="inline-block bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-medium transition duration-300">Réserver maintenant</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section id="reservation" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="title-font text-3xl font-bold text-center mb-4">Réserver une table</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">Réservez votre table pour une expérience culinaire inoubliable.</p>
+            
+            <div class="max-w-2xl mx-auto bg-gray-50 rounded-xl shadow-md overflow-hidden p-8">
+                <form id="reservation-form">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Nom complet</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg reservation-input focus:border-red-700" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg reservation-input focus:border-red-700" required>
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-gray-700 font-medium mb-2">Téléphone</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg reservation-input focus:border-red-700" required>
+                        </div>
+                        <div>
+                            <label for="guests" class="block text-gray-700 font-medium mb-2">Nombre de personnes</label>
+                            <select id="guests" class="w-full px-4 py-3 border border-gray-300 rounded-lg reservation-input focus:border-red-700" required>
+                                <option value="1">1 personne</option>
+                                <option value="2">2 personnes</option>
+                                <option value="3">3 personnes</option>
+                                <option value="4">4 personnes</option>
+                                <option value="5">5 personnes</option>
+                                <option value="6">6 personnes</option>
+                                <option value="7">7 personnes</option>
+                                <option value="8">8+ personnes</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="date" class="block text-gray-700 font-medium mb-2">Date</label>
+                            <input type="date" id="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg reservation-input focus:border-red-700" required>
+                        </div>
+                        <div>
+                            <label for="time" class="block text-gray-700 font-medium mb-2">Heure</label>
+                            <select id="time" class="w-full px-4 py-3 border border-gray-300 rounded-lg reservation-input focus:border-red-700" required>
+                                <option value="12:00">12:00</option>
+                                <option value="12:30">12:30</option>
+                                <option value="13:00">13:00</option>
+                                <option value="13:30">13:30</option>
+                                <option value="19:00">19:00</option>
+                                <option value="19:30">19:30</option>
+                                <option value="20:00">20:00</option>
+                                <option value="20:30">20:30</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label for="special-requests" class="block text-gray-700 font-medium mb-2">Demandes spéciales</label>
+                        <textarea id="special-requests" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg reservation-input focus:border-red-700"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white px-6 py-4 rounded-lg font-medium transition duration-300">Confirmer la réservation</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-utensils text-3xl text-red-500 mr-2"></i>
+                        <h3 class="title-font text-2xl font-bold">Le Bon Appétit</h3>
+                    </div>
+                    <p class="text-gray-400">Une expérience gastronomique exceptionnelle au cœur de Paris.</p>
+                </div>
+                <div>
+                    <h4 class="title-font text-lg font-bold mb-4">Heures d'ouverture</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex justify-between">
+                            <span>Lundi - Jeudi</span>
+                            <span>12h - 22h</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Vendredi - Samedi</span>
+                            <span>12h - 23h</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Dimanche</span>
+                            <span>12h - 21h</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="title-font text-lg font-bold mb-4">Contact</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3 text-red-500"></i>
+                            <span>12 Rue de la Gastronomie, 75008 Paris</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-red-500"></i>
+                            <span>+33 1 23 45 67 89</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-red-500"></i>
+                            <span>contact@bonappetit.com</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="title-font text-lg font-bold mb-4">Suivez-nous</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 hover:bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center">
+                            <i class="fab fa-tripadvisor"></i>
+                        </a>
+                    </div>
+                    <div class="mt-6">
+                        <h5 class="font-medium mb-2">Newsletter</h5>
+                        <div class="flex">
+                            <input type="email" placeholder="Votre email" class="px-4 py-2 bg-gray-800 text-white rounded-l-lg focus:outline-none w-full">
+                            <button class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-r-lg">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
+                <p>&copy; 2023 Le Bon Appétit. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-red-700 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Reservation Success Modal -->
+    <div id="reservation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="text-center">
+                <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="title-font text-2xl font-bold mb-2">Réservation confirmée!</h3>
+                <p class="text-gray-600 mb-6">Votre table a été réservée avec succès. Nous avons envoyé les détails à votre adresse email.</p>
+                <button id="close-modal" class="bg-red-700 hover:bg-red-800 text-white px-6 py-2 rounded-lg font-medium transition duration-300">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Back to Top Button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Slider Navigation
+        const slider = document.getElementById('special-offers');
+        const prevButton = document.getElementById('prev-slide');
+        const nextButton = document.getElementById('next-slide');
+        
+        if (slider && prevButton && nextButton) {
+            prevButton.addEventListener('click', () => {
+                slider.scrollBy({ left: -slider.offsetWidth / 2, behavior: 'smooth' });
+            });
+            
+            nextButton.addEventListener('click', () => {
+                slider.scrollBy({ left: slider.offsetWidth / 2, behavior: 'smooth' });
+            });
+        }
+        
+        // Menu Filtering
+        const menuItems = [
+            {
+                id: 1,
+                name: "Soupe à l'oignon",
+                description: "Soupe traditionnelle française à base d'oignons caramélisés, gratinée au fromage.",
+                price: 8.90,
+                category: "starters",
+                image: "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            },
+            {
+                id: 2,
+                name: "Foie gras",
+                description: "Foie gras de canard maison, servi avec toast et confiture de figues.",
+                price: 18.50,
+                category: "starters",
+                image: "https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80"
+            },
+            {
+                id: 3,
+                name: "Escargots de Bourgogne",
+                description: "Escargots préparés à la bourguignonne avec beurre persillé.",
+                price: 14.90,
+                category: "starters",
+                image: "https://images.unsplash.com/photo-1612872807486-1178a03a8a49?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            },
+            {
+                id: 4,
+                name: "Confit de canard",
+                description: "Cuisse de canard confite, servie avec pommes de terre sautées.",
+                price: 22.90,
+                category: "mains",
+                image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            },
+            {
+                id: 5,
+                name: "Bouillabaisse",
+                description: "Soupe de poissons traditionnelle de Marseille avec rouille et croûtons.",
+                price: 26.50,
+                category: "mains",
+                image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1371&q=80"
+            },
+            {
+                id: 6,
+                name: "Cassoulet",
+                description: "Cassoulet toulousain avec haricots blancs, saucisse et confit de canard.",
+                price: 21.90,
+                category: "mains",
+                image: "https://images.unsplash.com/photo-1611270635445-62df7d8e6958?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+            },
+            {
+                id: 7,
+                name: "Crème brûlée",
+                description: "Crème vanille caramélisée à la perfection.",
+                price: 7.90,
+                category: "desserts",
+                image: "https://images.unsplash.com/photo-1560157368-946d85ad0257?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+            },
+            {
+                id: 8,
+                name: "Mousse au chocolat",
+                description: "Mousse légère au chocolat noir, servie avec des fruits rouges.",
+                price: 8.50,
+                category: "desserts",
+                image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=627&q=80"
+            },
+            {
+                id: 9,
+                name: "Vin rouge maison",
+                description: "Verre de notre sélection de vin rouge de la région.",
+                price: 6.50,
+                category: "drinks",
+                image: "https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            },
+            {
+                id: 10,
+                name: "Champagne",
+                description: "Coupe de champagne brut français.",
+                price: 12.00,
+                category: "drinks",
+                image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            }
+        ];
+        
+        const menuContainer = document.getElementById('menu-items');
+        const categoryButtons = document.querySelectorAll('.dish-category');
+        
+        function renderMenuItems(category = 'all') {
+            menuContainer.innerHTML = '';
+            
+            const filteredItems = category === 'all' 
+                ? menuItems 
+                : menuItems.filter(item => item.category === category);
+            
+            filteredItems.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item relative rounded-lg overflow-hidden shadow-lg h-80';
+                menuItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-end p-6 menu-details">
+                        <h3 class="title-font text-xl font-bold text-white mb-1">${item.name}</h3>
+                        <p class="text-white text-sm mb-3">${item.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xl font-bold text-white">€${item.price.toFixed(2)}</span>
+                            <button class="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg text-sm font-medium">Commander</button>
+                        </div>
+                    </div>
+                `;
+                menuContainer.appendChild(menuItem);
+            });
+        }
+        
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const category = button.dataset.category;
+                renderMenuItems(category);
+            });
+        });
+        
+        // Initialize with all menu items
+        renderMenuItems();
+        document.querySelector('[data-category="all"]').classList.add('active');
+        
+        // Reservation Form
+        const reservationForm = document.getElementById('reservation-form');
+        const reservationModal = document.getElementById('reservation-modal');
+        const closeModal = document.getElementById('close-modal');
+        
+        if (reservationForm) {
+            reservationForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real app, you would send this data to a server
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    phone: document.getElementById('phone').value,
+                    guests: document.getElementById('guests').value,
+                    date: document.getElementById('date').value,
+                    time: document.getElementById('time').value,
+                    specialRequests: document.getElementById('special-requests').value
+                };
+                
+                console.log('Reservation submitted:', formData);
+                
+                // Show success modal
+                reservationModal.classList.remove('hidden');
+                
+                // Reset form
+                reservationForm.reset();
+            });
+        }
+        
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                reservationModal.classList.add('hidden');
+            });
+        }
+        
+        // Set minimum date for reservation (today)
+        const today = new Date().toISOString().split('T')[0];
+        const dateInput = document.getElementById('date');
+        if (dateInput) {
+            dateInput.min = today;
+        }
+    </script>
+</body>
+</html>
